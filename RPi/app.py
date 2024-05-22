@@ -1,29 +1,49 @@
 import threading
 import queue
-
-# Bluez gatt uart service (SERVER)
+from RPLCD.i2c import CharLCD
 from bluetooth_uart_server.bluetooth_uart_server import ble_gatt_uart_loop
 
-# extend this code so the value received via Bluetooth gets printed on the LCD
-# (maybe together with you Bluetooth device name or Bluetooth MAC?)
+# Initialize the LCD (adjust I2C address and dimensions as needed)
+try:
+    lcd = CharLCD(i2c_expander='PCF8574', address=0x3f, port=1,
+                  cols=16, rows=2, charmap='A00', auto_linebreaks=True)
+    lcd.write_string("LCD Initialized")
+except Exception as e:
+    print(f"Failed to initialize LCD: {e}")
+
+def display_message(message):
+    try:
+        lcd.clear()
+        lcd.write_string(message)
+    except Exception as e:
+        print(f"Failed to display message on LCD: {e}")
 
 def main():
-    i = 0
     rx_q = queue.Queue()
     tx_q = queue.Queue()
-    device_name = "pj-pi-gatt-uart" # TODO: replace with your own (unique) device name
-    threading.Thread(target=ble_gatt_uart_loop, args=(rx_q, tx_q, device_name), daemon=True).start()
+    device_name = "penjamin_pi"
+
+    def extended_ble_gatt_uart_loop(rx_q, tx_q, device_name):
+        ble_gatt_uart_loop(rx_q, tx_q, device_name)
+        from bluetooth_uart_server.bluetooth_uart_server import BLE_UART_SERVICE_UUID, BLE_UART_RX_CHAR_UUID, BLE_UART_TX_CHAR_UUID
+        print(f"Service UUID: {BLE_UART_SERVICE_UUID}")
+        print(f"RX Characteristic UUID: {BLE_UART_RX_CHAR_UUID}")
+        print(f"TX Characteristic UUID: {BLE_UART_TX_CHAR_UUID}")
+
+    threading.Thread(target=extended_ble_gatt_uart_loop, args=(rx_q, tx_q, device_name), daemon=True).start()
+    
     while True:
         try:
-            incoming = rx_q.get(timeout=1) # Wait for up to 1 second 
+            incoming = rx_q.get(timeout=1)
             if incoming:
-                print("In main loop: {}".format(incoming))
+                message = format(incoming)  # Assuming the data is encoded as utf-8
+                print(f"In main loop: {message}")
+                display_message(message)
+        except queue.Empty:
+            pass
         except Exception as e:
-            pass # nothing in Q 
+            print(f"Error in main loop: {e}")
 
-        # if i%5 == 0: # Send some data every 5 iterations
-        #     tx_q.put("test{}".format(i))
-        # i += 1
 if __name__ == '__main__':
     main()
 
