@@ -23,8 +23,8 @@ label_annotator = sv.LabelAnnotator()
 tx_q = Queue()
 rx_q = Queue()
 
-targetDeviceName=None
-targetDeviceMac="D8:3A:DD:B8:9E:86"
+targetDeviceName='penjamin_pi'
+targetDeviceMac= None
 
 def init_ble_thread():
     # Creating a new thread for running a function 'run' with specified arguments.
