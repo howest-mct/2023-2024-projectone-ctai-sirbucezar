@@ -7,3 +7,7 @@
 **Project Summary in max 10 words:** Material Identification | Smart Trash Bin
 
 **Project Title:** the SmarTrash
+
+___
+
+**Q&A:**
