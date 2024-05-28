@@ -9,7 +9,9 @@
 
 ## Preparation
 
-> Determine for yourself what you would like feedback on. Write down a few points in advance where you definitely want to receive feedback. This way, the feedback conversation will be more focused and the questions you definitely want answered will be addressed.
+> I would like to have my project run very efficiently. Git feedback will be really needed.
+> Electronics: I need to manage the power input for the stepper motor externally, I would want to have good power management as well as good component management
+> Maker Design Skills - What specific methods can I use for a specific type of wood etching?
 
 ## During the Conversation:
 
