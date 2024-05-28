@@ -1,12 +1,9 @@
 # Project Information
 
-**FIRST NAME LAST NAME:** A B
-
-**Sparring Partner:** C D
-
-**Project Summary in max 10 words:** E
-
-**Project Title:** F
+**FIRST & LAST NAME:** Marius Cezar Sirbu  
+**Sparring Partner:** Dobrescu Rares Andrei  
+**Project Summary (max 10 words):** Material Identification | Smart Trash Bin  
+**Project Title:** The SmarTrash
 
 # Tips for Feedback Conversations
 
