@@ -21,8 +21,6 @@
 
 > **Summarize:** Do not wait for a summary from the instructors, this is your task: Check if you have understood the message correctly by actively listening and summarizing in your own words.
 
-> **Be open to the feedback:** Do not wait for a summary from the instructors, this is your task: Check if you have understood the message correctly by actively listening and summarizing in your own words.
-
 > **Think about it:** Consider what you are going to do with the feedback and follow up. Do you find the comments justified or unjustified? Do you recognize yourself in the feedback? How are you going to address this?
 
 ## AFTER THE CONVERSATION
@@ -31,13 +29,14 @@
 
 # Feedforward Conversations
 
-## Conversation 1 (Date: xx/xx/2024)
+## Conversation 1 (Date: 29/05/2024)
 
-Lecturer:
+Lecturer: Tijn Veraghtert
 
-Questions for this conversation:
+Questions for this conversation: 
 
-- Question 1: V
+- Question 1: What technique should I choose to shape a part of my maker part?
+- Question 2: What is  the capacity of the laser cutter in terms of thickness of the wood that can be processed?
 
 This is the feedback on my questions.
 
