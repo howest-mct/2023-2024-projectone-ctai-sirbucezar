@@ -36,11 +36,16 @@ Lecturer: Tijn Veraghtert
 Questions for this conversation: 
 
 - Question 1: What technique should I choose to shape a part of my maker part?
-- Question 2: What is  the capacity of the laser cutter in terms of thickness of the wood that can be processed?
+- Question 2: What is  the capacity of the laser cutter in terms of dimensions of the wood that can be processed?
+- Question 3: How can I choose the right gearing for the moving part?
+- Question 4: Are the electronics I have chosen suitable for the weight/complexity of the prototype?
 
 This is the feedback on my questions.
 
-- Feedback 1: G
+- Feedback 1: I should use the fixed drill for creating the semi-holes. When I create the svg files, don't forget to etch the shape.
+- Feedback 2: 600x450mm for wood. I should either scale down my prototype so the pieces fit in the small CNC, or use the industrial CNC(needs assistance/gets pretty busy).
+- Feedback 3: I should first choose one of the 2 gears to laser cut out of acryl, and the other one shall be wooden so I can apply the modifications in sizing if needed. Use gear generator softwares for getting the right dimensions, ratios, sizing.
+- Feedback 4: My electronic components seem to fit well the task I want to assign them to.
 
 ## Conversation 2 (Date: xx/xx/2024)
 
