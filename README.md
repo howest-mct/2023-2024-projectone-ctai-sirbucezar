@@ -18,7 +18,11 @@
 - Tried the model through the api in VScode. It is functional, but the dataset neeeds more annotations, as well as the model has to be trained locally.
 
 **28 May**  
-- 
+- The object detection model has been trained in 10 epochs, achieving the best R2 score of 0.82
+- The classification model has been trained achiueving a 50% validation result.
+
+**29 May**
+- Applied Hyperparameter Tuning to the classification model using RandomSearch with cross validation
 
 ---
 
