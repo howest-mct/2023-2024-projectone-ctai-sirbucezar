@@ -65,7 +65,7 @@ Lecturer:
 
 Questions for this conversation:
 
-- [x] Question 1: V
+- Question 1: V
 
 This is the feedback on my questions.
 
@@ -93,8 +93,33 @@ This is the feedback on my questions.
 - Applied Hyperparameter Tuning to the classification model using RandomSearch with cross validation
 - Manually labeled all the dataset with the smart polygon tool on roboflow, retrained a MaskRCNN model, because YOLO - no matter of the optimization applied, does not offer a higher validation score than 0.54.
 
----
+**30 May**
 
+- Created a new version of the dataset with 100% correct annotations and labels and trained the yolo model again for 20 epochs.
+
+- Validation results:
+
+    | Class | Images | Instances | Box(P) |   R   | mAP50 | mAP50-95 |
+    |-------|--------|-----------|--------|-------|-------|----------|
+    | all   | 225    | 238       | 0.76   | 0.866 | 0.831 | 0.789    |
+    | Glass | 57     | 59        | 0.788  | 0.898 | 0.86  | 0.784    |
+    | PMD   | 83     | 84        | 0.857  | 0.854 | 0.922 | 0.899    |
+    | Paper | 72     | 81        | 0.897  | 0.858 | 0.881 | 0.85     |
+    | Rest  | 13     | 14        | 0.499  | 0.853 | 0.662 | 0.624    |
+
+  
+**31 May**
+  - Start of extensive fine-tuning of the model.
+ 
+    
+---
+### Code:
+
+**31 May**
+
+- Started creating the code files for the model prediction to be output to the RasPi.
+
+___
 ### Build Progress:
 
 **24 May**  
@@ -103,4 +128,7 @@ This is the feedback on my questions.
 
 **27 May**
 - Finalized the life-scaled 3D design on Tinkercad
-- Started creating the illustrator files for the CNC machine.
+- Started creating the .svg illustrator files for the CNC machine.
+
+**31 May**
+- Placed the order for all the electronic components needed.
