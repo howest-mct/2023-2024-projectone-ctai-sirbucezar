@@ -18,6 +18,8 @@
 
 # !AI/testvideo/test1_default.mp4
 
+#environments
+!AI/yolov8_env/
 # lgpio hidden files
 *.lgd*
 
