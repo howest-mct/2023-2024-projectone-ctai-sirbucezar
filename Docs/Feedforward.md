@@ -125,6 +125,7 @@ This is the feedback on my questions.
 
 - Created the format that sends the right type of data between the model and the RasPi.
 - Added the functionality of adding made predictions to the CSV file so the RasPi understands the position of the bin no matter the point the program is started at.
+- Established the fully functional workflow on the RasPi. Initialization -> Camera -> Classification -> Output.
 
 ___
 ### Build Progress:
