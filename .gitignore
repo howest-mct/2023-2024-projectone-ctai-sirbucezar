@@ -16,7 +16,7 @@
 # Exception: Unignore a specific video
 # !important_presentation.mp4  # This line overrides the general rule; uncomment to make active
 
-!AI/testvideo/test1_default.mp4
+# !AI/testvideo/test1_default.mp4
 
 # lgpio hidden files
 *.lgd*
@@ -6192,3 +6192,9 @@ AI/testphotos/test1.png
 AI/testphotos/test2.png
 AI/testphotos/test3.png
 AI/testphotos/test5.png
+AI/train_test.ipynb
+AI/testphotos/test4.png
+AI/testphotos/test6.png
+AI/testphotos/test7.png
+AI/testphotos/test8.png
+AI/testphotos/test9.png
