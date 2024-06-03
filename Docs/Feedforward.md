@@ -47,17 +47,17 @@ Lecturer: Tijn Veraghtert
 - ***Feedback 3:*** I should first choose one of the 2 gears to laser cut out of acryl, and the other one shall be wooden so I can apply the modifications in sizing if needed. Use gear generator softwares for getting the right dimensions, ratios, sizing.
 - ***Feedback 4:*** My electronic components seem to fit well the task I want to assign them to.
 
-## Conversation 2 (Date: xx/xx/2024)
+## Conversation 2 (Date: 03/06/2024)
 
-Lecturer:
+Lecturer: Pieter Jan
 
-Questions for this conversation:
+### Questions for this conversation:
+- **Fixed the Github lfg problem**
+- ***Question 1:*** What would be the best way to implement the transmission mechanism between the stepper motor and the gearing?
 
-- Question 1: V
+### This is the feedback on my questions.
 
-This is the feedback on my questions.
-
-- Feedback 1: G
+- ***Feedback 1:*** I should make a hole in the layer between the stepper motor and the gear, and then3D print a platform according to the right sizing needed to avoid design and mechanical complications.
 
 ## Conversation 3 (Date: xx/xx/2024)
 
@@ -110,7 +110,9 @@ This is the feedback on my questions.
   
 **31 May**
   - Start of extensive fine-tuning of the model.
- 
+
+ **2 June**
+  - Finished fine-tuning the model. Achieving way better accuracy on the testset and overall robustness.
     
 ---
 ### Code:
@@ -118,6 +120,11 @@ This is the feedback on my questions.
 **31 May**
 
 - Started creating the code files for the model prediction to be output to the RasPi.
+
+**3 June**
+
+- Created the format that sends the right type of data between the model and the RasPi.
+- Added the functionality of adding made predictions to the CSV file so the RasPi understands the position of the bin no matter the point the program is started at.
 
 ___
 ### Build Progress:
