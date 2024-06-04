@@ -72,6 +72,13 @@ This is the feedback on my questions.
 - Feedback 1: G
 
 
+### MVP Tour moments:
+
+**28 May**
+
+- I should annotate the data in a better way, using smart polygon.
+- Eliminate the many trials of preprocessing, add more augmentation techniques.
+- Establish the connection between the RasPi and the laptop through the socket.
 
 ---
 
@@ -125,6 +132,7 @@ This is the feedback on my questions.
 
 - Created the format that sends the right type of data between the model and the RasPi.
 - Added the functionality of adding made predictions to the CSV file so the RasPi understands the position of the bin no matter the point the program is started at.
+- Established the fully functional workflow on the RasPi. Initialization -> Camera -> Classification -> Output.
 
 ___
 ### Build Progress:
