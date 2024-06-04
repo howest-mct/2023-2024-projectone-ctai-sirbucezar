@@ -72,6 +72,13 @@ This is the feedback on my questions.
 - Feedback 1: G
 
 
+### MVP Tour moments:
+
+**28 May**
+
+- I should annotate the data in a better way, using smart polygon.
+- Eliminate the many trials of preprocessing, add more augmentation techniques.
+- Establish the connection between the RasPi and the laptop through the socket.
 
 ---
 
