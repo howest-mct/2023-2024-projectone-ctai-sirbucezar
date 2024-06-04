@@ -66,7 +66,7 @@ def blink_rgb_color(red, green, blue, duration, blink_rate=0.5):
         set_rgb_color(0, 0, 0)
         time.sleep(blink_rate)
 
-def check_internet_connection(url='http://www.google.com/', timeout=5):
+def check_internet_connection(url='http://www.google.com/', timeout=3):
     try:
         requests.head(url, timeout=timeout)
         return True
@@ -103,12 +103,12 @@ def process_image(img_path):
     print(f"Image path: {img_path}")
     if not os.path.exists(img_path):
         print(f"File does not exist: {img_path}")
-        return None, None
+        return None, None, None
     
     img = cv2.imread(img_path)
     if img is None:
         print(f"Failed to load image {img_path}")
-        return None, None
+        return None, None, None
     
     print(f"Image loaded: {img_path}, shape: {img.shape}")
     
@@ -116,7 +116,7 @@ def process_image(img_path):
     
     if len(predictions) == 0 or len(predictions[0].boxes) == 0:
         print("No predictions or boxes found.")
-        return None, None
+        return None, None, None
     
     boxes = predictions[0].boxes.xyxy  
     confs = predictions[0].boxes.conf  
@@ -135,9 +135,10 @@ def process_image(img_path):
         max_confidence_index = accuracies.index(max(accuracies))
         material_type = classifications[max_confidence_index]
         accuracy = accuracies[max_confidence_index]
-        return material_type, accuracy
+        box = boxes[max_confidence_index]
+        return material_type, accuracy, box
 
-    return None, None
+    return None, None, None
 
 def log_prediction(material_type, accuracy, file_path):
     prediction_id = get_next_prediction_id(file_path)
@@ -188,6 +189,20 @@ def capture_image():
     cv2.destroyAllWindows()
     return img_path
 
+# Crop the bounding box from the image
+def crop_bounding_box(img_path, box):
+    img = cv2.imread(img_path)
+    x1, y1, x2, y2 = map(int, box)
+    margin = 20  # Adding margin to the bounding box
+    x1 = max(0, x1 - margin)
+    y1 = max(0, y1 - margin)
+    x2 = min(img.shape[1], x2 + margin)
+    y2 = min(img.shape[0], y2 + margin)
+    cropped_img = img[y1:y2, x1:x2]
+    cropped_img_path = os.path.join(img_dir, 'cropped_image.png')
+    cv2.imwrite(cropped_img_path, cropped_img)
+    return cropped_img_path
+
 # Initialization
 def initialize_system():
     display_on_lcd('INITIATION...')
@@ -208,25 +223,30 @@ def scan_and_classify():
 
     display_on_lcd('Classifying...')
 
-    # Start threading for concurrent tasks
-    flash_thread = threading.Thread(target=blink_rgb_color, args=(1, 1, 0, 3))
-    flash_thread.start()
-
     # Process the image
-    material_type, accuracy = process_image(img_path)
-    flash_thread.join()  # Wait for the flashing to complete
-
+    material_type, accuracy, box = process_image(img_path)
     if material_type and accuracy is not None:
-        print(f'Material: {material_type}, Accuracy: {accuracy:.2%}')
-        log_prediction(material_type, accuracy, csv_file_path)
-        
-        for _ in range(5):
-            set_rgb_color(0, 1, 0)  # Flash green
-            time.sleep(0.2)
-            set_rgb_color(0, 0, 0)
-            time.sleep(0.2)
-        
-        display_on_lcd(f'Material: {material_type[:8]}', f'Accuracy: {accuracy:.2%}')
+        print(f'Initial Material: {material_type}, Accuracy: {accuracy:.2%}')
+        cropped_img_path = crop_bounding_box(img_path, box)
+
+        # Process the cropped image
+        material_type, accuracy, _ = process_image(cropped_img_path)
+
+        if material_type and accuracy is not None:
+            print(f'Material: {material_type}, Accuracy: {accuracy:.2%}')
+            log_prediction(material_type, accuracy, csv_file_path)
+            
+            for _ in range(5):
+                set_rgb_color(0, 1, 0)  # Flash green
+                time.sleep(0.2)
+                set_rgb_color(0, 0, 0)
+                time.sleep(0.2)
+            
+            display_on_lcd(f'Material: {material_type[:8]}', f'Accuracy: {accuracy:.2%}')
+        else:
+            display_on_lcd("Error", "No prediction")
+            set_rgb_color(1, 0, 0)  # Red for error
+            time.sleep(2)
     else:
         display_on_lcd("Error", "No prediction")
         set_rgb_color(1, 0, 0)  # Red for error
@@ -243,7 +263,7 @@ try:
         button_state = GPIO.input(button_pin)
         if button_state == GPIO.LOW:
             # Debounce the button press
-            time.sleep(0.1)
+            time.sleep(0.05)
             if GPIO.input(button_pin) == GPIO.LOW:
                 scan_and_classify()
                 time.sleep(1)  # Add a short delay to prevent multiple detections

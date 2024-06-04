@@ -6,3 +6,5 @@ rpi-lgpio==0.6
 ruamel.yaml==0.18.6
 ruamel.yaml.clib==0.2.8
 smbus==1.1.post2
+lgpio==0.2.2.0
+rpi-lgpio==0.6
