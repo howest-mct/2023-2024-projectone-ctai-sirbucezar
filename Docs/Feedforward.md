@@ -74,6 +74,21 @@ This is the feedback on my questions.
 
 ### MVP Tour moments:
 
+**28 May:**
+
+- I should train the model locally and fine-tune it. Add more epochs.
+- Add less preprocessing features and more augmentation features.
+- Correctly format the MD file.
+- Establish the connection between the laptop and the RasPi
+
+
+=======
+**28 May**
+
+- I should annotate the data in a better way, using smart polygon.
+- Eliminate the many trials of preprocessing, add more augmentation techniques.
+- Establish the connection between the RasPi and the laptop through the socket.
+
 ---
 
 ### AI Development:
