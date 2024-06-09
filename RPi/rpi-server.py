@@ -13,7 +13,7 @@ lcd = CharLCD(i2c_expander='PCF8574', address=0x3f, port=1,
 # Configuration for the RGB LED (common cathode)
 red_pin = 5
 green_pin = 6
-blue_pin = 13
+blue_pin = 14
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(red_pin, GPIO.OUT)
