@@ -31,7 +31,7 @@
 
 ## Conversation 1 (Date: 29/05/2024)
 
-Lecturer: Tijn Veraghtert
+Lecturer: Tijn 
 
 ### Questions for this conversation: 
 
@@ -59,17 +59,20 @@ Lecturer: Pieter Jan
 
 - ***Feedback 1:*** I should make a hole in the layer between the stepper motor and the gear, and then3D print a platform according to the right sizing needed to avoid design and mechanical complications.
 
-## Conversation 3 (Date: xx/xx/2024)
+## Conversation 3 (Date: 06/06/2024)
 
-Lecturer:
+Lecturer: Geert
 
 Questions for this conversation:
 
-- Question 1: V
+- Question 1: Where can I solder my circuit components?
+- Question 2: Check availability of some resistors and power adapters to know what to choose.(DC power adapter, female dc power connector, 10k ohm resistors
 
 This is the feedback on my questions.
 
-- Feedback 1: G
+- Feedback 1: A.1.102 in the presence of either Geert or Pieter-Jan
+- Feedback 2: I don't need to get resistors because the RasPi already has built in resistors in the power pins.
+- Feedback 3; I got a comprehensive guide for connecting the electronics correctly.
 
 
 ## MVP Tour moments:
@@ -81,6 +84,17 @@ This is the feedback on my questions.
 - Correctly format the MD file.
 - Establish the connection between the laptop and the RasPi
 
+**4 June**
+
+- Update the feedforward file accordingly.
+- Schedule consult with Marie to talk about the model accuracy.
+- Update the logic of the workflow, remove unneeded parts
+
+**11 June**
+
+- Add a color indication for the user when the bin is available to be used in the right compartment.
+- Start with the documentation files. (Video/Instructables/Poster)
+- Add build progress to toggl.
 
 ---
 
@@ -122,6 +136,10 @@ This is the feedback on my questions.
 
  **2 June**
   - Finished fine-tuning the model. Achieving way better accuracy on the testset and overall robustness.
+
+**7 June**
+
+- Trained another 2nd model just for classification purposes. Achieving way better results in all kind of lighting conditions.
     
 ---
 ### Code:
@@ -130,12 +148,17 @@ This is the feedback on my questions.
 
 - Started creating the code files for the model prediction to be output to the RasPi.
 
+
 **3 June**
 
 - Created the format that sends the right type of data between the model and the RasPi.
 - Added the functionality of adding made predictions to the CSV file so the RasPi understands the position of the bin no matter the point the program is started at.
 - Established the fully functional workflow on the RasPi. Initialization -> Camera -> Classification -> Output.
 
+  
+**7 June**
+- Electriconics workflow ready. Power BTN -> Scan Button -> Stepper Motor. All steps are accompanied by indications on the LCD display and he RGB led.
+- The code reads the last used bin to understand how to manipulate the positionof the stepper motor according to the present prediction.
 ___
 ### Build Progress:
 
@@ -149,3 +172,8 @@ ___
 
 **31 May**
 - Placed the order for all the electronic components needed.
+
+**4 June**
+- Received the electronics and other components, started assembly.
+
+
