@@ -153,12 +153,13 @@ This is the feedback on my questions.
 
 - Created the format that sends the right type of data between the model and the RasPi.
 - Added the functionality of adding made predictions to the CSV file so the RasPi understands the position of the bin no matter the point the program is started at.
-- Established the fully functional workflow on the RasPi. Initialization -> Camera -> Classification -> Output.
+- Established the full workflow on the RasPi. Initialization -> Camera -> Classification -> Output.
 
   
 **7 June**
 - Electriconics workflow ready. Power BTN -> Scan Button -> Stepper Motor. All steps are accompanied by indications on the LCD display and he RGB led.
-- The code reads the last used bin to understand how to manipulate the positionof the stepper motor according to the present prediction.
+- The code reads the last used bin to understand how to manipulate the position of the stepper motor according to the present prediction.
+
 ___
 ### Build Progress:
 
