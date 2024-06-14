@@ -1,0 +1,16 @@
+[Unit]
+Description=ProjectOne Project
+After=network.target
+
+[Service]
+ExecStart=/home/user/2023-2024-projectone-ctai-sirbucezar/.venv/bin/python -u /home/user/2023-2024-projectone-ctai-sirbucezar/RPi/app.py
+WorkingDirectory=/home/user/2023-2024-projectone-ctai-sirbucezar/RPi/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=user
+CPUSchedulingPolicy=rr
+CPUSchedulingPriority=99
+
+[Install]
+WantedBy=multi-user.target
