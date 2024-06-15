@@ -9,6 +9,8 @@ StandardOutput=inherit
 StandardError=inherit
 Restart=always
 User=user
+Environment="PATH=/home/user/2023-2024-projectone-ctai-sirbucezar/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment=PYTHONUNBUFFERED=1
 CPUSchedulingPolicy=rr
 CPUSchedulingPriority=99
 
