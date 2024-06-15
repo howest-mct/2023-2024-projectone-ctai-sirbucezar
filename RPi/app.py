@@ -5,13 +5,28 @@ import threading
 import subprocess
 import signal
 import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Import configurations
+import config
 
 # GPIO Pin Definitions
 power_button_pin = 18  # GPIO 18 for the power button
 power_led_pin = 23     # GPIO 23 for the power LED
 
 # Setup for LCD Display
-lcd = CharLCD(i2c_expander='PCF8574', address=0x27, port=1, cols=16, rows=2, charmap='A00', auto_linebreaks=True)
+lcd = CharLCD(
+    i2c_expander='PCF8574',
+    address=config.lcd_address,
+    port=1,
+    cols=config.lcd_cols,
+    rows=config.lcd_rows,
+    charmap='A00',
+    auto_linebreaks=True
+)
 
 # GPIO Setup
 GPIO.setmode(GPIO.BCM)
@@ -37,7 +52,6 @@ def power_button_callback(channel):
     if GPIO.input(power_button_pin) == GPIO.LOW:  # Button pressed
         system_powered_on = True
         GPIO.output(power_led_pin, GPIO.HIGH)    # Turn on LED
-        print("Power button pressed. System ON.")
         update_lcd_display("System ON")
 
         # Start the main script if not already running
@@ -50,30 +64,25 @@ def power_button_callback(channel):
 
     else:
         system_powered_on = False
-        GPIO.output(power_led_pin, GPIO.LOW)     # Turn off LED
+        GPIO.output(power_led_pin, GPIO.LOW)  # Turn off LED when the system is off
         update_lcd_display("System OFF")
 
         # If the main script is running, terminate it
         if main_script_process is not None and main_script_process.poll() is None:
-            print("Terminating main script...")
             os.killpg(os.getpgid(main_script_process.pid), signal.SIGINT)  # Send SIGINT to the process group
             main_script_process.wait()  # Wait for the process to terminate
-            print("Main script terminated.")
             update_lcd_display("System OFF")
             GPIO.output(power_led_pin, GPIO.LOW)
             main_script_process = None  # Reset the process variable
 
 # Setup the callback for the power button
-GPIO.add_event_detect(power_button_pin, GPIO.BOTH, callback=power_button_callback, bouncetime=200)
+GPIO.add_event_detect(power_button_pin, GPIO.BOTH, callback=power_button_callback, bouncetime=300)
 
 try:
-    print("System ready. Waiting for power button events.")
     update_lcd_display("System OFF")
     GPIO.output(power_led_pin, GPIO.LOW)
     while True:
         time.sleep(3)  # Sleep to reduce CPU usage
 finally:
-    # update_lcd_display("System OFF")
-    time.sleep(5)
-    print("Cleaning up GPIO...")
+    time.sleep(3)
     GPIO.cleanup()
