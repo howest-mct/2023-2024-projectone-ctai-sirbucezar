@@ -3,7 +3,7 @@
 **FIRST & LAST NAME:** Marius Cezar Sirbu  
 **Sparring Partner:** Dobrescu Rares Andrei  
 **Project Summary:** Material Identification | Smart Trash Bin  
-**Project Title:** The SmarTrash
+**Project Title:** The SmartBin
 
 # Tips for Feedback Conversations
 
