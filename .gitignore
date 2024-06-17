@@ -186,3 +186,8 @@ AI/material_id.ipynb
 RPi/bin_logs.csv
 AI/material_id.ipynb
 AI/material_id.ipynb
+RPi/stepper_test.py
+RPi/captured_images/captured_image.jpg
+RPi/captured_images/cropped_detected_image.png
+RPi/captured_images/cropped_image.jpg
+RPi/captured_images/processed_image_with_boxes.jpg
