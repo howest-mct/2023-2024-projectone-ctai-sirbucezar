@@ -1,65 +1,79 @@
+# image_processing.py
 import os
 import cv2
-import numpy as np
-from ultralytics import YOLO
-import config
 import subprocess
+from inference_sdk import InferenceHTTPClient
+from config import ROBOFLOW_API_KEY, ROBOFLOW_MODEL_ID, IMG_DIR
 
-# Load the YOLO model
-yolo_model = YOLO(config.yolo_model_path)
+# Initialize the Roboflow InferenceHTTPClient
+client = InferenceHTTPClient(
+    api_url="https://detect.roboflow.com",
+    api_key=ROBOFLOW_API_KEY
+)
 
-def capture_image(img_dir):
-    """Captures an image using libcamera-still and saves it to the specified directory."""
-    img_path = os.path.join(img_dir, 'captured_image.jpg')
+def capture_image():
+    """
+    Capture an image using the system's camera and save it to a predefined directory.
+    """
+    img_path = os.path.join(IMG_DIR, 'captured_image.jpg')
     capture_command = ['libcamera-still', '-o', img_path, '--timeout', '1000']
     subprocess.run(capture_command)
-    if not os.path.exists(img_path):
+    if os.path.exists(img_path):
+        print(f"Image captured and saved to {img_path}")
+    else:
         print("Failed to capture image.")
     return img_path
 
-def crop_image(img_path):
-    """Crops the image to the specified area."""
+def process_image(img_path):
+    """
+    Process the captured image to prepare it for classification.
+    """
+    print(f"Processing image: {img_path}")
+    if not os.path.exists(img_path):
+        print(f"Image path does not exist: {img_path}")
+        return None
+
     img = cv2.imread(img_path)
     if img is None:
         print(f"Failed to load image from path: {img_path}")
         return None
 
-    cropped_img = img[config.top_left_y:config.bottom_right_y, config.top_left_x:config.bottom_right_x]
-    cropped_img_path = os.path.join(os.path.dirname(img_path), 'cropped_image.jpg')
+    # Define the coordinates for the crop area based on the rectangle in the wooden platform
+    top_left_x = 600
+    top_left_y = 0
+    bottom_right_x = 1900
+    bottom_right_y = 1900
+
+    # Crop the image to the specified area
+    cropped_img = img[top_left_y:bottom_right_y, top_left_x:bottom_right_x]
+
+    # Save the cropped image for verification
+    cropped_img_path = os.path.join(IMG_DIR, 'cropped_image.jpg')
     cv2.imwrite(cropped_img_path, cropped_img)
+    print(f"Cropped image saved to {cropped_img_path}")
+
     return cropped_img_path
 
-def process_image(img_path):
-    """Processes the image with YOLO and returns the cropped detected object's path, label, and confidence."""
-    cropped_img_path = crop_image(img_path)
-    if not cropped_img_path:
-        return None, None, None
+def classify_cropped_object(cropped_img_path):
+    """
+    Classify the cropped image using the Roboflow API.
+    """
+    print(f"Classifying cropped image: {cropped_img_path}")
+    if not os.path.exists(cropped_img_path):
+        print(f"Cropped image path does not exist: {cropped_img_path}")
+        return None, None
 
-    cropped_img = cv2.imread(cropped_img_path)
-    predictions = yolo_model.predict(source=cropped_img, save=False)
+    # Use the client to infer the image
+    try:
+        result = client.infer(cropped_img_path, model_id=ROBOFLOW_MODEL_ID)
 
-    if not predictions or not predictions[0].boxes:
-        return None, None, None
-
-    boxes = predictions[0].boxes.xyxy
-    confs = predictions[0].boxes.conf
-    cls = predictions[0].boxes.cls
-
-    max_confidence_index = np.argmax(confs)
-    box = boxes[max_confidence_index]
-    confidence = confs[max_confidence_index]
-    label = yolo_model.names[int(cls[max_confidence_index])]
-
-    x1, y1, x2, y2 = map(int, box)
-    cv2.rectangle(cropped_img, (x1, y1), (x2, y2), (255, 0, 0), 2)
-    cv2.putText(cropped_img, f"{label} {confidence:.2f}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
-
-    output_img_path = os.path.join(os.path.dirname(img_path), 'processed_image_with_boxes.jpg')
-    cv2.imwrite(output_img_path, cropped_img)
-    
-    # Further crop to the detected object's bounding box if needed
-    detected_obj_img = cropped_img[y1:y2, x1:x2]
-    detected_obj_img_path = os.path.join(os.path.dirname(img_path), 'cropped_detected_image.png')
-    cv2.imwrite(detected_obj_img_path, detected_obj_img)
-
-    return detected_obj_img_path, label, confidence
+        if 'predictions' in result and result['predictions']:
+            predicted_class = result['predictions'][0]['class']
+            confidence = result['predictions'][0]['confidence']
+            return predicted_class, confidence
+        else:
+            print("No predictions found in the response.")
+            return None, None
+    except Exception as e:
+        print(f"Error in classification: {e}")
+        return None, None

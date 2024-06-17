@@ -1,18 +1,17 @@
 [Unit]
-Description=ProjectOne Project
+Description=My Project Service
 After=network.target
 
 [Service]
-ExecStart=/home/user/2023-2024-projectone-ctai-sirbucezar/.venv/bin/python -u /home/user/2023-2024-projectone-ctai-sirbucezar/RPi/app.py
-WorkingDirectory=/home/user/2023-2024-projectone-ctai-sirbucezar/RPi/
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
 User=user
-Environment="PATH=/home/user/2023-2024-projectone-ctai-sirbucezar/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-Environment=PYTHONUNBUFFERED=1
-CPUSchedulingPolicy=rr
-CPUSchedulingPriority=99
+WorkingDirectory=/home/user/2023-2024-projectone-ctai-sirbucezar
+Environment="PYTHONPATH=/home/user/2023-2024-projectone-ctai-sirbucezar/.venv/lib/python3.11/site-packages"
+ExecStart=/bin/bash -c 'source /home/user/2023-2024-projectone-ctai-sirbucezar/.venv/bin/activate && exec /home/user/2023-2024-projectone-ctai-sirbucezar/.venv/bin/python /home/user/2023-2024-projectone-ctai-sirbucezar/RPi/app.py'
+Restart=always
+RestartSec=10
+StandardOutput=journal+console
+StandardError=journal+console
+Environment="SYSTEMD_LOG_LEVEL=debug"
 
 [Install]
 WantedBy=multi-user.target
