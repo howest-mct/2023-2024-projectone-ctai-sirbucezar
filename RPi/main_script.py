@@ -10,6 +10,8 @@ import RPi.GPIO as GPIO
 from RPLCD.i2c import CharLCD
 import threading
 
+GPIO.setmode(GPIO.BCM)
+
 # GPIO and Peripheral Setup
 button_pin = 20  # GPIO 20 for scan button
 start_button_pin = 25  # GPIO 25 for start button
@@ -30,7 +32,6 @@ classification_complete = False
 current_bin_position = 1  # Default bin position
 
 # Initialize GPIO
-GPIO.setmode(GPIO.BCM)
 GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(start_button_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(red_pin, GPIO.OUT)
@@ -57,7 +58,7 @@ img_dir = os.path.join(script_dir, 'captured_images')
 os.makedirs(img_dir, exist_ok=True)
 
 # CSV File Path
-csv_file_path = 'RPi/bin_logs.csv'
+csv_file_path = '/home/user/2023-2024-projectone-ctai-sirbucezar/RPi/bin_logs.csv'
 
 # Bin Mapping
 bin_mapping = {
@@ -96,108 +97,6 @@ def display_on_lcd(message_line1, message_line2=""):
     if message_line2:
         lcd.write_string('\r\n')
         lcd.write_string(message_line2.ljust(16))
-
-# Define custom characters for the loading animation
-loading_frames = [
-    [
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b11111   # *****
-    ],
-    [
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b11111,  # *****
-        0b11111   # *****
-    ],
-    [
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111   # *****
-    ],
-    [
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111   # *****
-    ],
-    [
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111   # *****
-    ],
-    [
-        0b00000,  # (empty row)
-        0b00000,  # (empty row)
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111   # *****
-    ],
-    [
-        0b00000,  # (empty row)
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111   # *****
-    ],
-    [
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111,  # *****
-        0b11111   # *****
-    ]
-]
-
-
-# Create the custom characters in the LCD's character map
-for i, frame in enumerate(loading_frames):
-    lcd.create_char(i, frame)
-
-# Function to show loading bar during processing
-def show_loading_bar():
-    loading_pos = (1, 0)  # Bottom row starting position for the loading bar
-    frame_index = 0
-
-    while getattr(threading.currentThread(), "do_run", True):
-        lcd.cursor_pos = loading_pos
-        lcd.write_string('')  # Clear the line with spaces
-        for _ in range(16):
-            lcd.write_string(chr(frame_index))
-            frame_index = (frame_index + 1) % len(loading_frames)
-            time.sleep(0.1)  # Adjust the speed of the animation as needed
 
 # Internet Connection Check
 def check_internet_connection(url='http://www.google.com/', timeout=1):
@@ -422,9 +321,8 @@ def main_loop():
                 display_on_lcd('Processing...', '')  # Clear second line for loading bar
                 classification_complete = False
 
-                # Start the loading bar animation
-                loading_thread = threading.Thread(target=show_loading_bar)
-                loading_thread.start()
+                # Start flashing yellow LED
+                threading.Thread(target=blink_yellow_until_complete).start()
 
                 # Processing Stage
                 img_path = capture_image()
@@ -432,17 +330,12 @@ def main_loop():
 
                 if cropped_img_path is not None:
                     display_on_lcd('Classifying...', '')  # Clear second line for loading bar
-                    set_rgb_color(1, 1, 0)  # Yellow
                     classified_material, classification_confidence = classify_cropped_object(cropped_img_path)
-
-                    # Stop the loading animation
-                    loading_thread.do_run = False
-                    loading_thread.join()
 
                     if classified_material and classification_confidence is not None:
                         log_prediction(classified_material, classification_confidence, csv_file_path)
 
-                        classification_complete = True
+                        classification_complete = True  # This will stop the yellow blinking
 
                         display_on_lcd(f'Material: {classified_material[:8]}', f'Accuracy: {classification_confidence:.2%}')
                         time.sleep(5)
@@ -463,15 +356,15 @@ def main_loop():
                         display_on_lcd('Error', 'No classification')
                         set_rgb_color(1, 0, 0)  # Red for error
                         time.sleep(2)
-                        classification_complete = True
+                        classification_complete = True  # Stop yellow blinking on error
 
                 else:
                     display_on_lcd('Error', 'No detection')
                     set_rgb_color(1, 0, 0)  # Red for error
                     time.sleep(2)
-                    classification_complete = True
+                    classification_complete = True  # Stop yellow blinking on error
 
-                classification_complete = True
+                classification_complete = True  # Ensure yellow blinking stops after each cycle
 
         except Exception as e:
             print(f"An error occurred: {e}")
