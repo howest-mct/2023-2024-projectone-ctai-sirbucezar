@@ -5,10 +5,6 @@
 **Project Summary (max 10 words):** Material Identification | Smart Trash Bin  
 **Project Title:** The SmarTrash
 
-
-  
-
-
-
+Must add .env files with the API keys. 
 
 
